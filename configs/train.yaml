@@ -1,0 +1,36 @@
+defaults:
+  - base_config
+  - _self_
+
+hydra:
+  run:
+    dir: training_results/${now:%Y-%m-%d_%H-%M-%S}
+  sweep:
+    dir: training_results/multirun/${now:%Y-%m-%d_%H-%M-%S}
+    subdir: ${hydra.job.override_dirname}
+
+  sweeper:
+    params:
+      network_environment.packet_creation_prob: 0.1,0.2,0.8
+
+network_environment:
+  _target_: network_env.NetworkEnvironment
+  transmission_time: 2
+  num_of_nodes: 10
+  packet_creation_prob: 0.2
+training:
+  seed: 42
+  episodes: 200
+  timesteps: 300
+reward:
+  value: 1
+  gamma: 0.99
+  entropy_beta: 0.01
+gnn_policy:
+  _target_: policy.GNNPolicy
+  node_dim: 2
+  edge_dim: 2
+  hidden_dim: 32
+  num_of_nodes: ${network_environment.num_of_nodes}
+optimizer:
+  lr: 2e-4
