@@ -18,9 +18,9 @@ class NetworkEnvironment(nn.Module):
         self.p = p
         self.network_graph: nx.Graph = nx.connected_watts_strogatz_graph(n=num_of_nodes, k=k, p=p)
 
-        # Add edge attributes (tranmission capacity and betweenness)
+        # Add edge attributes (transmission capacity and betweenness)
         for u, v in self.network_graph.edges():
-            self.network_graph[u][v]["capacity"] = random.randint(2, 10)  # noqa: S311
+            self.network_graph[u][v]["capacity"] = 10 # random.randint(2, 10)  # noqa: S311
             self.network_graph[u][v]["remaining"] = self.network_graph[u][v]["capacity"]
         bet_centrality = nx.edge_betweenness_centrality(self.network_graph)
         for (u, v), val in bet_centrality.items():
@@ -158,7 +158,7 @@ class NetworkEnvironment(nn.Module):
         self.in_transit_packets_time[-1].fill_(-1)  # Clear the last slice (new empty step)
 
         # put a packet on the line, the packet should take T timesteps to cross the line
-        # check for the packets that finished the line and arrrived in new nodes
+        # check for the packets that finished the line and arrived in new nodes
         # those are now the "new_packets" for the next step
         ready_to_transmit = self.queues > 0
         self.queues[ready_to_transmit] -= 1
