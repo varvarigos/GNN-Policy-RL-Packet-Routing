@@ -24,13 +24,14 @@ class NetworkEnvironmentConfig:
 @dataclass
 class RewardConfig:
     value: float = 0.1
-    gamma: float = 0.99
+    gamma: float = 0.9
     entropy_beta: float = 0.001
 
 
 @dataclass
 class OptimizerConfig:
     lr: float = 5e-5
+    max_grad_norm: float = 0.5
 
 
 @dataclass
